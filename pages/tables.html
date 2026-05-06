@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en" class="light h-full overflow-hidden">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=auto">
+  <title>Table Styles Showcase</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {} }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ---------- Custom table styles ---------- */
+    .table-striped tbody tr:nth-child(even) {
+      background-color: rgba(0,0,0,0.03);
+    }
+    .dark .table-striped tbody tr:nth-child(even) {
+      background-color: rgba(255,255,255,0.05);
+    }
+
+    .table-hover tbody tr:hover {
+      background-color: rgba(236, 72, 153, 0.1);
+    }
+    .dark .table-hover tbody tr:hover {
+      background-color: rgba(236, 72, 153, 0.2);
+    }
+
+    .table-neumorphic {
+      background: #e0e0e0;
+      box-shadow: 6px 6px 12px #bebebe, -6px -6px 12px #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .dark .table-neumorphic {
+      background: #2d2d2d;
+      box-shadow: 6px 6px 12px #1a1a1a, -6px -6px 12px #404040;
+    }
+
+    .table-glass {
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .dark .table-glass {
+      background: rgba(0,0,0,0.3);
+      border-color: rgba(255,255,255,0.1);
+    }
+
+    .table-brutal {
+      border: 3px solid #000;
+      box-shadow: 5px 5px 0 #000;
+      border-radius: 0;
+    }
+    .table-brutal th,
+    .table-brutal td {
+      border: 2px solid #000;
+    }
+
+    .table-bordered th,
+    .table-bordered td {
+      border: 1px solid #ddd;
+    }
+    .dark .table-bordered th,
+    .dark .table-bordered td {
+      border-color: #555;
+    }
+
+    .sticky-header thead th {
+      position: sticky;
+      top: 0;
+      background: #f9fafb;
+      z-index: 10;
+    }
+    .dark .sticky-header thead th {
+      background: #374151;
+    }
+
+    .sticky-col tbody td:first-child,
+    .sticky-col thead th:first-child {
+      position: sticky;
+      left: 0;
+      background: #f9fafb;
+      z-index: 5;
+    }
+    .dark .sticky-col tbody td:first-child,
+    .dark .sticky-col thead th:first-child {
+      background: #374151;
+    }
+
+    .sticky-both thead th:first-child {
+      z-index: 15;
+      background: #f9fafb;
+    }
+    .dark .sticky-both thead th:first-child {
+      background: #374151;
+    }
+    .sticky-both thead th {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #f9fafb;
+    }
+    .sticky-both tbody td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 5;
+      background: #ffffff;
+    }
+    .dark .sticky-both thead th {
+      background: #374151;
+    }
+    .dark .sticky-both tbody td:first-child {
+      background: #1f2937;
+    }
+
+    /* ---------- Tab pane transition ---------- */
+    .table-example {
+      opacity: 0;
+      display: none;
+      transition: opacity 0.3s ease;
+    }
+    .table-example.active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* ---------- Sidebar active state ---------- */
+    .sidebar-btn.sidebar-active {
+      background: #fce7f3;
+      font-weight: 500;
+    }
+    .dark .sidebar-btn.sidebar-active {
+      background: #831843;
+      color: #fff;
+    }
+  </style>
+</head>
+<body class="flex flex-col bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white font-sans text-sm h-full overflow-hidden">
+
+  <!-- HEADER -->
+  <header class="w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow flex items-center justify-between z-10 px-4 py-2">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-table text-pink-600 dark:text-pink-400 text-xl"></i>
+      <span class="font-semibold text-sm truncate">Table Styles Showcase</span>
+    </div>
+    <button id="themeToggle" class="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition p-1">
+      <i class="fa-solid fa-moon dark:hidden"></i>
+      <i class="fa-solid fa-sun hidden dark:block"></i>
+    </button>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <div class="flex flex-1 overflow-hidden">
+    <!-- SIDEBAR -->
+    <aside class="w-24 bg-gray-100 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col overflow-y-auto">
+      <div class="p-2">
+        <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 truncate">Styles</h3>
+        <nav class="flex flex-col gap-1">
+          <button data-target="table-classic" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full sidebar-active">
+            Classic Minimal
+          </button>
+          <button data-target="table-striped" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Striped Rows
+          </button>
+          <button data-target="table-bordered" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Bordered
+          </button>
+          <button data-target="table-borderless" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Borderless
+          </button>
+          <button data-target="table-hover" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Hover
+          </button>
+          <button data-target="table-compact" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Compact
+          </button>
+          <button data-target="table-card" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Card
+          </button>
+          <button data-target="table-dark" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Dark Theme
+          </button>
+          <button data-target="table-neumorphic" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Neumorphic
+          </button>
+          <button data-target="table-glass" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Glass
+          </button>
+          <button data-target="table-brutal" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Brutalist
+          </button>
+          <button data-target="table-bento" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Bento
+          </button>
+          <button data-target="table-frozen-header" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Frozen Header
+          </button>
+          <button data-target="table-frozen-col" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Frozen Col
+          </button>
+          <button data-target="table-frozen-both" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Frozen Both
+          </button>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto p-4">
+
+      <!-- 1. Classic Minimal (active by default) -->
+      <div id="table-classic" class="table-example bg-white dark:bg-gray-800 rounded-2xl p-6 shadow active">
+        <h2 class="text-lg font-semibold mb-4">Classic Minimal</h2>
+        <p class="text-xs opacity-70 mb-2">Clean lines, light header, subtle row separators.</p>
+        <table class="w-full text-xs border-collapse">
+          <thead>
+            <tr class="border-b border-gray-200 dark:border-gray-700 text-left text-gray-500 dark:text-gray-400">
+              <th class="p-2 font-medium">Name</th>
+              <th class="p-2 font-medium">Role</th>
+              <th class="p-2 font-medium">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+            <tr><td class="p-2">Alice</td><td class="p-2">Admin</td><td class="p-2"><span class="text-green-600">Active</span></td></tr>
+            <tr><td class="p-2">Bob</td><td class="p-2">Editor</td><td class="p-2"><span class="text-yellow-600">Pending</span></td></tr>
+            <tr><td class="p-2">Charlie</td><td class="p-2">Viewer</td><td class="p-2"><span class="text-red-600">Inactive</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 2. Striped Rows -->
+      <div id="table-striped" class="table-example bg-white dark:bg-gray-800 rounded-2xl p-6 shadow">
+        <h2 class="text-lg font-semibold mb-4">Striped Rows</h2>
+        <p class="text-xs opacity-70 mb-2">Alternating row colours for readability.</p>
+        <table class="w-full text-xs border-collapse table-striped">
+          <thead>
+            <tr class="bg-gray-100 dark:bg-gray-700 text-left text-gray-600 dark:text-gray-300">
+              <th class="p-2">Product</th>
+              <th class="p-2">Price</th>
+              <th class="p-2">Stock</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="p-2">Widget A</td><td class="p-2">$12.99</td><td class="p-2">145</td></tr>
+            <tr><td class="p-2">Widget B</td><td class="p-2">$9.49</td><td class="p-2">0 (out)</td></tr>
+            <tr><td class="p-2">Widget C</td><td class="p-2">$24.00</td><td class="p-2">32</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 3. Bordered Table -->
+      <div id="table-bordered" class="table-example bg-white dark:bg-gray-800 rounded-2xl p-6 shadow">
+        <h2 class="text-lg font-semibold mb-4">Bordered Table</h2>
+        <p class="text-xs opacity-70 mb-2">Every cell has its own border – traditional spreadsheet feel.</p>
+        <table class="w-full text-xs table-bordered border-collapse">
+          <thead>
+            <tr class="bg-gray-50 dark:bg-gray-700 text-left">
+              <th class="p-2">Country</th>
+              <th class="p-2">Capital</th>
+              <th class="p-2">Population</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="p-2">France</td><td class="p-2">Paris</td><td class="p-2">67 M</td></tr>
+            <tr><td class="p-2">Japan</td><td class="p-2">Tokyo</td><td class="p-2">125 M</td></tr>
+            <tr><td class="p-2">Brazil</td><td class="p-2">Brasília</td><td class="p-2">213 M</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 4. Borderless -->
+      <div id="table-borderless" class="table-example bg-white dark:bg-gray-800 rounded-2xl p-6 shadow">
+        <h2 class="text-lg font-semibold mb-4">Borderless (Clean)</h2>
+        <p class="text-xs opacity-70 mb-2">No borders at all – open and spacious.</p>
+        <table class="w-full text-xs">
+          <thead>
+            <tr class="text-left text-gray-500 dark:text-gray-400">
+              <th class="pb-2 font-medium">Metric</th>
+              <th class="pb-2 font-medium">Value</th>
+              <th class="pb-2 font-medium">Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="py-1">Users</td><td class="py-1">8,492</td><td class="py-1 text-green-500">+12%</td></tr>
+            <tr><td class="py-1">Sessions</td><td class="py-1">52,103</td><td class="py-1 text-red-500">-3%</td></tr>
+            <tr><td class="py-1">Bounce</td><td class="py-1">42%</td><td class="py-1 text-green-500">+2%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 5. Hover Rows -->
+      <div id="table-hover" class="table-example bg-white dark:bg-gray-800 rounded-2xl p-6 shadow">
+        <h2 class="text-lg font-semibold mb-4">Hover Highlight</h2>
+        <p class="text-xs opacity-70 mb-2">Rows highlight on mouse hover for better interaction.</p>
+        <table class="w-full text-xs border-collapse table-hover">
+          <thead>
+            <tr class="border-b border-gray-200 dark:border-gray-700 text-left">
+              <th class="p-2">Task</th>
+              <th class="p-2">Assignee</th>
+              <th class="p-2">Due</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+            <tr><td class="p-2">Design review</td><td class="p-2">Alice</td><td class="p-2">Oct 15</td></tr>
+            <tr><td class="p-2">Code refactor</td><td class="p-2">Bob</td><td class="p-2">Oct 20</td></tr>
+            <tr><td class="p-2">Testing</td><td class="p-2">Charlie</td><td class="p-2">Oct 25</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 6. Compact / Dense -->
+      <div id="table-compact" class="table-example bg-white dark:bg-gray-800 rounded-2xl p-6 shadow">
+        <h2 class="text-lg font-semibold mb-4">Compact (Dense)</h2>
+        <p class="text-xs opacity-70 mb-2">Reduced padding for showing lots of data.</p>
+        <table class="w-full text-xs border-collapse">
+          <thead>
+            <tr class="bg-gray-100 dark:bg-gray-700 text-left">
+              <th class="px-1 py-1">ID</th>
+              <th class="px-1 py-1">Name</th>
+              <th class="px-1 py-1">Qty</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="px-1 py-0.5">001</td><td class="px-1 py-0.5">Item A</td><td class="px-1 py-0.5">12</td></tr>
+            <tr><td class="px-1 py-0.5">002</td><td class="px-1 py-0.5">Item B</td><td class="px-1 py-0.5">8</td></tr>
+            <tr><td class="px-1 py-0.5">003</td><td class="px-1 py-0.5">Item C</td><td class="px-1 py-0.5">3</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 7. Card / Elevated -->
+      <div id="table-card" class="table-example bg-white dark:bg-gray-800 rounded-2xl p-6 shadow">
+        <h2 class="text-lg font-semibold mb-4">Card / Elevated</h2>
+        <p class="text-xs opacity-70 mb-2">The whole table is a raised card with rounded corners.</p>
+        <div class="shadow-lg rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+          <table class="w-full text-xs border-collapse">
+            <thead>
+              <tr class="bg-pink-50 dark:bg-pink-900/30 text-left">
+                <th class="p-3 font-semibold">Server</th>
+                <th class="p-3 font-semibold">CPU</th>
+                <th class="p-3 font-semibold">RAM</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+              <tr><td class="p-3">US-East</td><td class="p-3">45%</td><td class="p-3">62%</td></tr>
+              <tr><td class="p-3">EU-West</td><td class="p-3">22%</td><td class="p-3">38%</td></tr>
+              <tr><td class="p-3">Asia-South</td><td class="p-3">78%</td><td class="p-3">90%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 8. Dark Theme Table -->
+      <div id="table-dark" class="table-example bg-black dark:bg-gray-950 rounded-2xl p-6 shadow">
+        <h2 class="text-lg font-semibold mb-4 text-white">Dark Theme</h2>
+        <p class="text-xs text-gray-300 mb-2">Optimised for dark backgrounds with light text.</p>
+        <table class="w-full text-xs border-collapse text-gray-200">
+          <thead>
+            <tr class="border-b border-gray-700 text-left text-gray-400">
+              <th class="p-2">Planet</th>
+              <th class="p-2">Diameter</th>
+              <th class="p-2">Moons</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-800">
+            <tr><td class="p-2">Earth</td><td class="p-2">12,742 km</td><td class="p-2">1</td></tr>
+            <tr><td class="p-2">Mars</td><td class="p-2">6,779 km</td><td class="p-2">2</td></tr>
+            <tr><td class="p-2">Jupiter</td><td class="p-2">139,820 km</td><td class="p-2">95</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 9. Neumorphic Table -->
+      <div id="table-neumorphic" class="table-example bg-gray-200 dark:bg-gray-800 rounded-2xl p-6">
+        <h2 class="text-lg font-semibold mb-4">Neumorphic</h2>
+        <p class="text-xs opacity-70 mb-2">Soft 3D look with inset shadows.</p>
+        <div class="table-neumorphic p-3">
+          <table class="w-full text-xs border-collapse">
+            <thead>
+              <tr class="text-left text-gray-700 dark:text-gray-300">
+                <th class="p-2">Skill</th>
+                <th class="p-2">Level</th>
+                <th class="p-2">Years</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="p-2">JavaScript</td><td class="p-2">Expert</td><td class="p-2">5</td></tr>
+              <tr><td class="p-2">Python</td><td class="p-2">Advanced</td><td class="p-2">4</td></tr>
+              <tr><td class="p-2">SQL</td><td class="p-2">Intermediate</td><td class="p-2">3</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 10. Glass Table -->
+      <div id="table-glass" class="table-example bg-white/30 dark:bg-gray-800/30 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
+        <h2 class="text-lg font-semibold mb-4">Glassmorphic</h2>
+        <p class="text-xs opacity-70 mb-2">Frosted glass effect with coloured blur.</p>
+        <div class="table-glass p-3">
+          <table class="w-full text-xs border-collapse">
+            <thead>
+              <tr class="text-left text-gray-800 dark:text-gray-200 border-b border-white/30">
+                <th class="p-2">Fruit</th>
+                <th class="p-2">Color</th>
+                <th class="p-2">Taste</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/20">
+              <tr><td class="p-2">Apple</td><td class="p-2">Red</td><td class="p-2">Sweet</td></tr>
+              <tr><td class="p-2">Lemon</td><td class="p-2">Yellow</td><td class="p-2">Sour</td></tr>
+              <tr><td class="p-2">Lime</td><td class="p-2">Green</td><td class="p-2">Bitter</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 11. Brutalist Table -->
+      <div id="table-brutal" class="table-example bg-white dark:bg-gray-800 rounded-none p-6">
+        <h2 class="text-lg font-semibold mb-4">Brutalist</h2>
+        <p class="text-xs opacity-70 mb-2">Raw, heavy borders, high contrast, no rounded corners.</p>
+        <div class="table-brutal inline-block w-full bg-yellow-100 dark:bg-gray-700">
+          <table class="w-full text-xs border-collapse text-black dark:text-white">
+            <thead>
+              <tr class="bg-yellow-300 dark:bg-yellow-600">
+                <th class="p-2 text-left">Animal</th>
+                <th class="p-2 text-left">Class</th>
+                <th class="p-2 text-left">Legs</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="p-2">Cat</td><td class="p-2">Mammal</td><td class="p-2">4</td></tr>
+              <tr><td class="p-2">Frog</td><td class="p-2">Amphibian</td><td class="p-2">4</td></tr>
+              <tr><td class="p-2">Ant</td><td class="p-2">Insect</td><td class="p-2">6</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 12. Bento Box Style -->
+      <div id="table-bento" class="table-example bg-white dark:bg-gray-800 rounded-2xl p-6 shadow">
+        <h2 class="text-lg font-semibold mb-4">Bento Box Style</h2>
+        <p class="text-xs opacity-70 mb-2">Rounded, soft shadows, widget-like individual cells.</p>
+        <table class="w-full text-xs border-separate border-spacing-2">
+          <thead>
+            <tr>
+              <th class="bg-gray-50 dark:bg-gray-700 rounded-xl p-3 text-left shadow-sm">Name</th>
+              <th class="bg-gray-50 dark:bg-gray-700 rounded-xl p-3 text-left shadow-sm">Score</th>
+              <th class="bg-gray-50 dark:bg-gray-700 rounded-xl p-3 text-left shadow-sm">Rank</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm">Alpha</td>
+              <td class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm">98</td>
+              <td class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm">1</td>
+            </tr>
+            <tr>
+              <td class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm">Beta</td>
+              <td class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm">87</td>
+              <td class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm">2</td>
+            </tr>
+            <tr>
+              <td class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm">Gamma</td>
+              <td class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm">72</td>
+              <td class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm">3</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 13. Frozen Header Row -->
+      <div id="table-frozen-header" class="table-example bg-white dark:bg-gray-800 rounded-2xl p-6 shadow">
+        <h2 class="text-lg font-semibold mb-4">Frozen Header Row</h2>
+        <p class="text-xs opacity-70 mb-2">Sticky header that stays visible when scrolling vertically.</p>
+        <div class="h-32 overflow-auto border border-gray-200 dark:border-gray-700 rounded">
+          <table class="w-full text-xs border-collapse sticky-header">
+            <thead>
+              <tr class="text-left text-gray-600 dark:text-gray-300">
+                <th class="p-2">Column A</th>
+                <th class="p-2">Column B</th>
+                <th class="p-2">Column C</th>
+                <th class="p-2">Column D</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+              <tr><td class="p-2">Row 1</td><td class="p-2">Data</td><td class="p-2">Data</td><td class="p-2">Data</td></tr>
+              <tr><td class="p-2">Row 2</td><td class="p-2">Data</td><td class="p-2">Data</td><td class="p-2">Data</td></tr>
+              <tr><td class="p-2">Row 3</td><td class="p-2">Data</td><td class="p-2">Data</td><td class="p-2">Data</td></tr>
+              <tr><td class="p-2">Row 4</td><td class="p-2">Data</td><td class="p-2">Data</td><td class="p-2">Data</td></tr>
+              <tr><td class="p-2">Row 5</td><td class="p-2">Data</td><td class="p-2">Data</td><td class="p-2">Data</td></tr>
+              <tr><td class="p-2">Row 6</td><td class="p-2">Data</td><td class="p-2">Data</td><td class="p-2">Data</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 14. Frozen First Column -->
+      <div id="table-frozen-col" class="table-example bg-white dark:bg-gray-800 rounded-2xl p-6 shadow">
+        <h2 class="text-lg font-semibold mb-4">Frozen First Column</h2>
+        <p class="text-xs opacity-70 mb-2">First column stays fixed while horizontally scrolling.</p>
+        <div class="h-32 overflow-auto border border-gray-200 dark:border-gray-700 rounded">
+          <table class="w-full text-xs border-collapse sticky-col">
+            <thead>
+              <tr class="text-left text-gray-600 dark:text-gray-300">
+                <th class="p-2">Name</th>
+                <th class="p-2">Age</th>
+                <th class="p-2">City</th>
+                <th class="p-2">Country</th>
+                <th class="p-2">Phone</th>
+                <th class="p-2">Email</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+              <tr><td class="p-2 font-medium">Alice</td><td class="p-2">34</td><td class="p-2">New York</td><td class="p-2">USA</td><td class="p-2">123-456</td><td class="p-2">a@mail.com</td></tr>
+              <tr><td class="p-2 font-medium">Bob</td><td class="p-2">28</td><td class="p-2">London</td><td class="p-2">UK</td><td class="p-2">987-654</td><td class="p-2">b@mail.com</td></tr>
+              <tr><td class="p-2 font-medium">Charlie</td><td class="p-2">45</td><td class="p-2">Tokyo</td><td class="p-2">Japan</td><td class="p-2">555-1212</td><td class="p-2">c@mail.com</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 15. Frozen Both (First Column + Header) -->
+      <div id="table-frozen-both" class="table-example bg-white dark:bg-gray-800 rounded-2xl p-6 shadow">
+        <h2 class="text-lg font-semibold mb-4">Frozen Both (First Col + Header)</h2>
+        <p class="text-xs opacity-70 mb-2">First column and header stay in place while scrolling both axes.</p>
+        <div class="h-32 overflow-auto border border-gray-200 dark:border-gray-700 rounded">
+          <table class="w-full text-xs border-collapse sticky-both">
+            <thead>
+              <tr class="text-left text-gray-600 dark:text-gray-300">
+                <th class="p-2">ID</th>
+                <th class="p-2">Product</th>
+                <th class="p-2">Price</th>
+                <th class="p-2">Stock</th>
+                <th class="p-2">Supplier</th>
+                <th class="p-2">Location</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+              <tr><td class="p-2 font-medium">001</td><td class="p-2">Screen</td><td class="p-2">$199</td><td class="p-2">45</td><td class="p-2">LG</td><td class="p-2">Seoul</td></tr>
+              <tr><td class="p-2 font-medium">002</td><td class="p-2">Keyboard</td><td class="p-2">$89</td><td class="p-2">120</td><td class="p-2">Logitech</td><td class="p-2">Suzhou</td></tr>
+              <tr><td class="p-2 font-medium">003</td><td class="p-2">Mouse</td><td class="p-2">$49</td><td class="p-2">200</td><td class="p-2">Razer</td><td class="p-2">Singapore</td></tr>
+              <tr><td class="p-2 font-medium">004</td><td class="p-2">Webcam</td><td class="p-2">$75</td><td class="p-2">80</td><td class="p-2">Logitech</td><td class="p-2">Suzhou</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow flex items-center justify-between z-10 px-4 py-2">
+    <div class="flex items-center gap-2 w-full">
+      <span class="text-xs text-gray-500 dark:text-gray-400">Table Styles Showcase v1.0</span>
+      <span class="text-xs text-gray-400 dark:text-gray-500 ml-auto">Select a style from the sidebar</span>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      // Theme toggle
+      const toggleBtn = document.getElementById('themeToggle');
+      const html = document.documentElement;
+      const iconMoon = toggleBtn.querySelector('.fa-moon');
+      const iconSun = toggleBtn.querySelector('.fa-sun');
+
+      function setTheme(theme) {
+        if (theme === 'dark') {
+          html.classList.add('dark');
+          html.classList.remove('light');
+          iconMoon.classList.add('hidden');
+          iconSun.classList.remove('hidden');
+        } else {
+          html.classList.remove('dark');
+          html.classList.add('light');
+          iconMoon.classList.remove('hidden');
+          iconSun.classList.add('hidden');
+        }
+        localStorage.setItem('theme', theme);
+      }
+
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      setTheme(savedTheme);
+      toggleBtn.addEventListener('click', () => {
+        const current = html.classList.contains('dark') ? 'light' : 'dark';
+        setTheme(current);
+      });
+
+      // Tab pane switching (clean, smart)
+      const buttons = document.querySelectorAll('.sidebar-btn');
+      const examples = document.querySelectorAll('.table-example');
+
+      function showExample(targetId) {
+        const newActive = document.getElementById(targetId);
+        if (!newActive) return;
+
+        // 1. Fade out current active
+        const currentActive = document.querySelector('.table-example.active');
+        if (currentActive) {
+          currentActive.classList.remove('active');
+        }
+
+        // 2. Fade in the new one
+        requestAnimationFrame(() => {
+          newActive.classList.add('active');
+          void newActive.offsetWidth; // force reflow
+        });
+
+        // 3. Highlight sidebar button
+        buttons.forEach(btn => btn.classList.remove('sidebar-active'));
+        const activeBtn = document.querySelector(`.sidebar-btn[data-target="${targetId}"]`);
+        if (activeBtn) activeBtn.classList.add('sidebar-active');
+      }
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.dataset.target;
+          showExample(target);
+        });
+      });
+
+      // The initial active example is already marked with 'active' in HTML
+    })();
+  </script>
+</body>
+</html>

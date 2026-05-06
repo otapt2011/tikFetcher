@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" class="light h-full overflow-hidden">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=auto">
+  <title>Header Styles Showcase</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: {} } }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ---------- Glass effect ---------- */
+    .glass {
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+    }
+    .dark .glass {
+      background: rgba(0,0,0,0.3);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* ---------- Sticky demo container ---------- */
+    .sticky-container {
+      height: 300px;
+      overflow-y: auto;
+    }
+
+    /* ---------- Tab pane transition ---------- */
+    .header-example {
+      opacity: 0;
+      display: none;
+      transition: opacity 0.3s ease;
+    }
+    .header-example.active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* ---------- Sidebar active ---------- */
+    .sidebar-btn.sidebar-active {
+      background: #fce7f3;
+      font-weight: 500;
+    }
+    .dark .sidebar-btn.sidebar-active {
+      background: #831843;
+      color: #fff;
+    }
+  </style>
+</head>
+<body class="flex flex-col bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white font-sans text-sm h-full overflow-hidden">
+
+  <!-- HEADER (theme) -->
+  <header class="w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow flex items-center justify-between z-10 px-4 py-2">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-heading text-pink-600 dark:text-pink-400 text-xl"></i>
+      <span class="font-semibold text-sm truncate">Header Styles Showcase</span>
+    </div>
+    <button id="themeToggle" class="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition p-1">
+      <i class="fa-solid fa-moon dark:hidden"></i>
+      <i class="fa-solid fa-sun hidden dark:block"></i>
+    </button>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <div class="flex flex-1 overflow-hidden">
+    <!-- SIDEBAR -->
+    <aside class="w-24 bg-gray-100 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col overflow-y-auto">
+      <div class="p-2">
+        <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 truncate">Styles</h3>
+        <nav class="flex flex-col gap-1">
+          <button data-target="classic" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full sidebar-active">Classic</button>
+          <button data-target="split" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">Split</button>
+          <button data-target="centered" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">Centered</button>
+          <button data-target="transparent" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">Transparent</button>
+          <button data-target="glass" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">Glass</button>
+          <button data-target="dark" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">Dark</button>
+          <button data-target="search" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">Search</button>
+          <button data-target="icons" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">Icons</button>
+          <button data-target="sticky" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">Sticky</button>
+          <button data-target="gradient" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">Gradient</button>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto p-4 space-y-4">
+
+      <!-- 1. Classic Simple -->
+      <div id="classic" class="header-example bg-white dark:bg-gray-800 rounded-2xl shadow p-4 active">
+        <h2 class="text-lg font-semibold mb-2">Classic Simple</h2>
+        <p class="text-xs opacity-70 mb-4">Logo left, navigation links right.</p>
+        <div class="border border-gray-200 dark:border-gray-700 rounded overflow-hidden">
+          <header class="flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900">
+            <div class="flex items-center gap-2 font-bold text-pink-600">Logo</div>
+            <nav class="flex gap-4 text-xs text-gray-600 dark:text-gray-300">
+              <a href="#" class="hover:text-pink-600">Home</a>
+              <a href="#" class="hover:text-pink-600">About</a>
+              <a href="#" class="hover:text-pink-600">Contact</a>
+            </nav>
+          </header>
+        </div>
+      </div>
+
+      <!-- 2. Split (logo left, icons right) -->
+      <div id="split" class="header-example bg-white dark:bg-gray-800 rounded-2xl shadow p-4">
+        <h2 class="text-lg font-semibold mb-2">Split</h2>
+        <p class="text-xs opacity-70 mb-4">Logo left, action buttons right.</p>
+        <div class="border border-gray-200 dark:border-gray-700 rounded overflow-hidden">
+          <header class="flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900">
+            <span class="font-bold text-pink-600">Brand</span>
+            <div class="flex gap-3 text-gray-500 dark:text-gray-300">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <i class="fa-solid fa-bell"></i>
+              <i class="fa-solid fa-user-circle"></i>
+            </div>
+          </header>
+        </div>
+      </div>
+
+      <!-- 3. Centered Stacked -->
+      <div id="centered" class="header-example bg-white dark:bg-gray-800 rounded-2xl shadow p-4">
+        <h2 class="text-lg font-semibold mb-2">Centered Stacked</h2>
+        <p class="text-xs opacity-70 mb-4">Logo centered above navigation.</p>
+        <div class="border border-gray-200 dark:border-gray-700 rounded overflow-hidden">
+          <header class="flex flex-col items-center py-3 bg-white dark:bg-gray-900">
+            <div class="font-bold text-xl text-pink-600">Logo</div>
+            <nav class="flex gap-4 mt-2 text-xs text-gray-600 dark:text-gray-300">
+              <a href="#" class="hover:text-pink-600">Shop</a>
+              <a href="#" class="hover:text-pink-600">Collections</a>
+              <a href="#" class="hover:text-pink-600">About</a>
+            </nav>
+          </header>
+        </div>
+      </div>
+
+      <!-- 4. Transparent over hero -->
+      <div id="transparent" class="header-example bg-white dark:bg-gray-800 rounded-2xl shadow p-4">
+        <h2 class="text-lg font-semibold mb-2">Transparent Over Hero</h2>
+        <p class="text-xs opacity-70 mb-4">Header sits on an image background.</p>
+        <div class="relative h-40 rounded overflow-hidden">
+          <img src="https://picsum.photos/800/200" class="absolute inset-0 w-full h-full object-cover" alt="bg">
+          <header class="absolute inset-x-0 top-0 flex items-center justify-between px-4 py-3 text-white">
+            <span class="font-bold">Logo</span>
+            <nav class="flex gap-4 text-xs">
+              <a href="#">Explore</a>
+              <a href="#">Pricing</a>
+            </nav>
+          </header>
+        </div>
+      </div>
+
+      <!-- 5. Glassmorphic -->
+      <div id="glass" class="header-example bg-white dark:bg-gray-800 rounded-2xl shadow p-4">
+        <h2 class="text-lg font-semibold mb-2">Glassmorphic</h2>
+        <p class="text-xs opacity-70 mb-4">Frosted glass background.</p>
+        <div class="relative h-40 rounded overflow-hidden">
+          <img src="https://picsum.photos/800/200" class="absolute inset-0 w-full h-full object-cover" alt="bg">
+          <header class="absolute inset-x-0 top-0 glass px-4 py-3 flex items-center justify-between">
+            <span class="font-bold text-gray-800 dark:text-white">Logo</span>
+            <nav class="flex gap-4 text-xs text-gray-800 dark:text-gray-200">
+              <a href="#">Home</a>
+              <a href="#">Blog</a>
+            </nav>
+          </header>
+        </div>
+      </div>
+
+      <!-- 6. Dark header -->
+      <div id="dark" class="header-example bg-white dark:bg-gray-800 rounded-2xl shadow p-4">
+        <h2 class="text-lg font-semibold mb-2">Dark Theme</h2>
+        <p class="text-xs opacity-70 mb-4">Dark background with light text.</p>
+        <div class="border border-gray-700 rounded overflow-hidden">
+          <header class="flex items-center justify-between px-4 py-3 bg-gray-900 text-gray-100">
+            <span class="font-bold text-pink-400">DarkLogo</span>
+            <nav class="flex gap-4 text-xs">
+              <a href="#" class="hover:text-pink-400">Dashboard</a>
+              <a href="#" class="hover:text-pink-400">Settings</a>
+            </nav>
+          </header>
+        </div>
+      </div>
+
+      <!-- 7. With search bar -->
+      <div id="search" class="header-example bg-white dark:bg-gray-800 rounded-2xl shadow p-4">
+        <h2 class="text-lg font-semibold mb-2">Search Bar</h2>
+        <p class="text-xs opacity-70 mb-4">Search input integrated into header.</p>
+        <div class="border border-gray-200 dark:border-gray-700 rounded overflow-hidden">
+          <header class="flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 gap-3">
+            <span class="font-bold text-pink-600 truncate">Logo</span>
+            <div class="flex-1 max-w-xs">
+              <input type="text" placeholder="Search..." class="w-full rounded px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 dark:bg-gray-700">
+            </div>
+            <nav class="flex gap-3 text-xs text-gray-600 dark:text-gray-300">
+              <a href="#">Help</a>
+            </nav>
+          </header>
+        </div>
+      </div>
+
+      <!-- 8. Icons + Profile -->
+      <div id="icons" class="header-example bg-white dark:bg-gray-800 rounded-2xl shadow p-4">
+        <h2 class="text-lg font-semibold mb-2">Icons + Profile</h2>
+        <p class="text-xs opacity-70 mb-4">Icon buttons and avatar.</p>
+        <div class="border border-gray-200 dark:border-gray-700 rounded overflow-hidden">
+          <header class="flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900">
+            <span class="font-bold text-pink-600">App</span>
+            <div class="flex items-center gap-4">
+              <i class="fa-solid fa-envelope text-gray-500 dark:text-gray-300"></i>
+              <i class="fa-solid fa-gear text-gray-500 dark:text-gray-300"></i>
+              <div class="w-6 h-6 rounded-full bg-pink-500 text-white flex items-center justify-center text-xs font-bold">A</div>
+            </div>
+          </header>
+        </div>
+      </div>
+
+      <!-- 9. Sticky on scroll -->
+      <div id="sticky" class="header-example bg-white dark:bg-gray-800 rounded-2xl shadow p-4">
+        <h2 class="text-lg font-semibold mb-2">Sticky on Scroll</h2>
+        <p class="text-xs opacity-70 mb-4">Header sticks to top when scrolling (demonstrated inside container).</p>
+        <div class="sticky-container border border-gray-200 dark:border-gray-700 rounded">
+          <header class="sticky top-0 bg-white dark:bg-gray-900 px-4 py-3 border-b border-gray-200 dark:border-gray-700 shadow-sm flex items-center justify-between z-10">
+            <span class="font-bold text-pink-600">Sticky Logo</span>
+            <nav class="flex gap-4 text-xs text-gray-600 dark:text-gray-300">
+              <a href="#">Home</a>
+              <a href="#">About</a>
+            </nav>
+          </header>
+          <div class="p-4 space-y-2 text-xs">
+            <p>Scroll down to see sticky...</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit... (repeat 10x)</p>
+            <p>(content repeated for scroll demo)</p>
+            <p>Lorem ipsum dolor sit amet.</p>
+            <p>Lorem ipsum dolor sit amet.</p>
+            <p>Lorem ipsum dolor sit amet.</p>
+            <p>Lorem ipsum dolor sit amet.</p>
+            <p>Lorem ipsum dolor sit amet.</p>
+            <p>Lorem ipsum dolor sit amet.</p>
+            <p>Lorem ipsum dolor sit amet.</p>
+            <p>Lorem ipsum dolor sit amet.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. Gradient -->
+      <div id="gradient" class="header-example bg-white dark:bg-gray-800 rounded-2xl shadow p-4">
+        <h2 class="text-lg font-semibold mb-2">Gradient / Colored</h2>
+        <p class="text-xs opacity-70 mb-4">Vibrant gradient background.</p>
+        <div class="rounded overflow-hidden">
+          <header class="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white">
+            <span class="font-bold">GradientCo</span>
+            <nav class="flex gap-4 text-xs">
+              <a href="#">Features</a>
+              <a href="#">Pricing</a>
+            </nav>
+          </header>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow flex items-center justify-between z-10 px-4 py-2">
+    <span class="text-xs text-gray-500 dark:text-gray-400">Header Styles Showcase v1.0</span>
+    <span class="text-xs text-gray-400 dark:text-gray-500">Select a style from the sidebar</span>
+  </footer>
+
+  <script>
+    (() => {
+      const toggleBtn = document.getElementById('themeToggle');
+      const html = document.documentElement;
+      const iconMoon = toggleBtn.querySelector('.fa-moon');
+      const iconSun = toggleBtn.querySelector('.fa-sun');
+      const setTheme = (theme) => {
+        if (theme === 'dark') {
+          html.classList.add('dark'); html.classList.remove('light');
+          iconMoon.classList.add('hidden'); iconSun.classList.remove('hidden');
+        } else {
+          html.classList.remove('dark'); html.classList.add('light');
+          iconMoon.classList.remove('hidden'); iconSun.classList.add('hidden');
+        }
+        localStorage.setItem('theme', theme);
+      };
+      setTheme(localStorage.getItem('theme') || 'light');
+      toggleBtn.addEventListener('click', () => setTheme(html.classList.contains('dark') ? 'light' : 'dark'));
+
+      // Tab pane switching
+      const buttons = document.querySelectorAll('.sidebar-btn');
+      const examples = document.querySelectorAll('.header-example');
+      const showExample = (targetId) => {
+        const newActive = document.getElementById(targetId);
+        if (!newActive) return;
+        const currentActive = document.querySelector('.header-example.active');
+        if (currentActive) currentActive.classList.remove('active');
+        requestAnimationFrame(() => {
+          newActive.classList.add('active');
+          void newActive.offsetWidth;
+        });
+        buttons.forEach(btn => btn.classList.remove('sidebar-active'));
+        document.querySelector(`.sidebar-btn[data-target="${targetId}"]`)?.classList.add('sidebar-active');
+      };
+      buttons.forEach(btn => btn.addEventListener('click', () => showExample(btn.dataset.target)));
+    })();
+  </script>
+</body>
+</html>

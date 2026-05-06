@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en" class="light h-full overflow-hidden">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=auto">
+  <title>Button Morphisms Showcase</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {} }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ---------- Custom button effects ---------- */
+    .backdrop-blur-lg {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .neu-btn {
+      background: #e0e0e0;
+      box-shadow: 6px 6px 12px #bebebe, -6px -6px 12px #ffffff;
+    }
+    .dark .neu-btn {
+      background: #2d2d2d;
+      box-shadow: 6px 6px 12px #1a1a1a, -6px -6px 12px #404040;
+    }
+    .neu-btn:active:not(:disabled) {
+      box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+    }
+    .dark .neu-btn:active:not(:disabled) {
+      box-shadow: inset 4px 4px 8px #1a1a1a, inset -4px -4px 8px #404040;
+    }
+
+    .clay-btn {
+      background: #f0b0b0;
+      box-shadow: inset 2px 2px 6px rgba(255,255,255,0.7), inset -2px -2px 6px rgba(0,0,0,0.1), 6px 8px 12px rgba(0,0,0,0.1);
+    }
+    .clay-btn:active:not(:disabled) {
+      box-shadow: inset 4px 4px 8px rgba(0,0,0,0.15), inset -4px -4px 8px rgba(255,255,255,0.6);
+    }
+
+    .skeuo-btn {
+      background: linear-gradient(180deg, #4a90e2 0%, #2563eb 100%);
+      box-shadow: 0 4px 0 #1e40af, 0 6px 10px rgba(0,0,0,0.3);
+      border-radius: 8px;
+    }
+    .skeuo-btn:active:not(:disabled) {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #1e40af, 0 4px 6px rgba(0,0,0,0.3);
+    }
+
+    .brutal-btn {
+      border: 3px solid #000;
+      box-shadow: 4px 4px 0 #000;
+      background: #ffeb3b;
+      color: #000;
+      border-radius: 0;
+    }
+    .brutal-btn:active:not(:disabled) {
+      box-shadow: 1px 1px 0 #000;
+      transform: translate(3px, 3px);
+    }
+
+    .aurora-btn {
+      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+      filter: blur(0.5px);
+      position: relative;
+      overflow: hidden;
+    }
+    .aurora-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: inherit;
+      filter: blur(20px);
+      opacity: 0.4;
+    }
+
+    .pixel-btn {
+      font-family: 'Courier New', monospace;
+      image-rendering: pixelated;
+      border: 3px solid #000;
+      background: #ddd;
+      box-shadow: 3px 3px 0 #000;
+    }
+    .pixel-btn:active:not(:disabled) {
+      box-shadow: 1px 1px 0 #000;
+      transform: translate(2px, 2px);
+    }
+
+    .bento-btn {
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-radius: 24px;
+    }
+    .dark .bento-btn {
+      background: #1f2937;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    /* ---------- Tab pane transition ---------- */
+    .btn-example {
+      opacity: 0;
+      display: none;            /* hidden by default, removed when activating */
+      transition: opacity 0.3s ease;
+    }
+    .btn-example.active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* ---------- Sidebar active state ---------- */
+    .sidebar-btn.sidebar-active {
+      background: #fce7f3;
+      font-weight: 500;
+    }
+    .dark .sidebar-btn.sidebar-active {
+      background: #831843;
+      color: #fff;
+    }
+  </style>
+</head>
+<body class="flex flex-col bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white font-sans text-sm h-full overflow-hidden">
+
+  <!-- HEADER -->
+  <header class="w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow flex items-center justify-between z-10 px-4 py-2">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-sparkles text-pink-600 dark:text-pink-400 text-xl"></i>
+      <span class="font-semibold text-sm truncate">Button Morphisms Showcase</span>
+    </div>
+    <button id="themeToggle" class="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition p-1">
+      <i class="fa-solid fa-moon dark:hidden"></i>
+      <i class="fa-solid fa-sun hidden dark:block"></i>
+    </button>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <div class="flex flex-1 overflow-hidden">
+    <!-- SIDEBAR -->
+    <aside class="w-24 bg-gray-100 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col overflow-y-auto">
+      <div class="p-2">
+        <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 truncate">Styles</h3>
+        <nav class="flex flex-col gap-1">
+          <button data-target="btn-glass" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full sidebar-active">
+            Glass
+          </button>
+          <button data-target="btn-neumorphic" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Neumorph
+          </button>
+          <button data-target="btn-clay" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Clay
+          </button>
+          <button data-target="btn-skeuo" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Skeuo
+          </button>
+          <button data-target="btn-flat" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Flat
+          </button>
+          <button data-target="btn-swiss" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Swiss
+          </button>
+          <button data-target="btn-brutal" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Brutalist
+          </button>
+          <button data-target="btn-aurora" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Aurora
+          </button>
+          <button data-target="btn-bento" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Bento
+          </button>
+          <button data-target="btn-pixel" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Pixel
+          </button>
+          <button data-target="btn-gooey" class="sidebar-btn text-left px-2 py-1 text-xs rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition truncate w-full">
+            Gooey
+          </button>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto p-4">
+      <!-- SVG filter for gooey -->
+      <svg style="position: absolute; width: 0; height: 0;">
+        <defs>
+          <filter id="goo">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
+            <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+          </filter>
+        </defs>
+      </svg>
+
+      <!-- 1. Glassmorphism -->
+      <div id="btn-glass" class="btn-example bg-white/30 dark:bg-gray-800/30 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-xl active">
+        <h2 class="text-lg font-semibold mb-4">Glassmorphism</h2>
+        <p class="text-xs opacity-70 mb-4">Frosted glass, blur, semi‑transparent background.</p>
+        <div class="flex justify-center items-center gap-4 flex-wrap">
+          <button class="px-4 py-2 text-sm font-medium rounded-xl transition duration-300 text-pink-600 dark:text-pink-200 border border-white/30 dark:border-white/10 backdrop-blur-lg bg-white/20 dark:bg-white/10 hover:bg-white/30 dark:hover:bg-white/20 active:bg-white/40 dark:active:bg-white/30 shadow-lg shadow-pink-500/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:grayscale">
+            Upload
+          </button>
+          <button disabled class="px-4 py-2 text-sm font-medium rounded-xl transition duration-300 text-pink-600 dark:text-pink-200 border border-white/30 dark:border-white/10 backdrop-blur-lg bg-white/20 dark:bg-white/10 hover:bg-white/30 dark:hover:bg-white/20 active:bg-white/40 dark:active:bg-white/30 shadow-lg shadow-pink-500/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:grayscale">
+            Upload
+          </button>
+        </div>
+      </div>
+
+
+  
+
+      <!-- 2. Neumorphism -->
+      <div id="btn-neumorphic" class="btn-example bg-gray-200 dark:bg-gray-800 rounded-2xl p-6 hidden">
+        <h2 class="text-lg font-semibold mb-4">Neumorphism</h2>
+        <p class="text-xs opacity-70 mb-4">Soft 3D with opposite shadows, matches background.</p>
+        <div class="flex justify-center items-center gap-4 flex-wrap">
+          <button class="neu-btn px-6 py-3 text-sm font-semibold rounded-2xl transition duration-200 text-gray-700 dark:text-gray-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale-0">
+            Press
+          </button>
+          <button disabled class="neu-btn px-6 py-3 text-sm font-semibold rounded-2xl transition duration-200 text-gray-700 dark:text-gray-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale-0">
+            Press
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. Claymorphism -->
+      <div id="btn-clay" class="btn-example bg-white dark:bg-gray-800 rounded-2xl p-6 hidden">
+        <h2 class="text-lg font-semibold mb-4">Claymorphism</h2>
+        <p class="text-xs opacity-70 mb-4">Chunky, playful, inner & outer shadows, pastel.</p>
+        <div class="flex justify-center items-center gap-4 flex-wrap">
+          <button class="clay-btn px-6 py-3 text-sm font-bold rounded-full text-gray-800 transition duration-200 transform hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale disabled:hover:scale-100">
+            Like
+          </button>
+          <button disabled class="clay-btn px-6 py-3 text-sm font-bold rounded-full text-gray-800 transition duration-200 transform hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale disabled:hover:scale-100">
+            Like
+          </button>
+        </div>
+      </div>
+
+      <!-- 4. Skeuomorphism -->
+      <div id="btn-skeuo" class="btn-example bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 hidden">
+        <h2 class="text-lg font-semibold mb-4">Skeuomorphism</h2>
+        <p class="text-xs opacity-70 mb-4">Realistic textures, heavy shadows, 3D depth.</p>
+        <div class="flex justify-center items-center gap-4 flex-wrap">
+          <button class="skeuo-btn px-6 py-3 text-sm font-bold text-white uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale">
+            Sync
+          </button>
+          <button disabled class="skeuo-btn px-6 py-3 text-sm font-bold text-white uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale">
+            Sync
+          </button>
+        </div>
+      </div>
+
+      <!-- 5. Flat Design -->
+      <div id="btn-flat" class="btn-example bg-white dark:bg-gray-800 rounded-2xl p-6 hidden">
+        <h2 class="text-lg font-semibold mb-4">Flat Design</h2>
+        <p class="text-xs opacity-70 mb-4">No shadows, solid colours, clean and minimalist.</p>
+        <div class="flex justify-center items-center gap-4 flex-wrap">
+          <button class="px-4 py-2 rounded-lg bg-blue-500 text-white font-medium hover:bg-blue-600 transition disabled:opacity-50 disabled:cursor-not-allowed disabled:grayscale">
+            Confirm
+          </button>
+          <button disabled class="px-4 py-2 rounded-lg bg-blue-500 text-white font-medium hover:bg-blue-600 transition disabled:opacity-50 disabled:cursor-not-allowed disabled:grayscale">
+            Confirm
+          </button>
+        </div>
+      </div>
+
+      <!-- 6. Minimal / Swiss -->
+      <div id="btn-swiss" class="btn-example bg-white dark:bg-gray-800 rounded-none p-6 border border-gray-200 dark:border-gray-700 hidden">
+        <h2 class="text-lg font-semibold mb-4">Minimal / Swiss</h2>
+        <p class="text-xs opacity-70 mb-4">Clean lines, wide spacing, understated elegance.</p>
+        <div class="flex justify-center items-center gap-4 flex-wrap">
+          <button class="px-6 py-2 border border-gray-800 dark:border-gray-200 text-gray-800 dark:text-gray-200 uppercase tracking-widest text-xs font-light hover:bg-gray-800 hover:text-white dark:hover:bg-white dark:hover:text-gray-900 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale">
+            SUBMIT
+          </button>
+          <button disabled class="px-6 py-2 border border-gray-800 dark:border-gray-200 text-gray-800 dark:text-gray-200 uppercase tracking-widest text-xs font-light hover:bg-gray-800 hover:text-white dark:hover:bg-white dark:hover:text-gray-900 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale">
+            SUBMIT
+          </button>
+        </div>
+      </div>
+
+      <!-- 7. Brutalism -->
+      <div id="btn-brutal" class="btn-example bg-white dark:bg-gray-800 rounded-none p-6 hidden">
+        <h2 class="text-lg font-semibold mb-4">Brutalism</h2>
+        <p class="text-xs opacity-70 mb-4">Raw, high contrast, thick borders, hard shadows.</p>
+        <div class="flex justify-center items-center gap-4 flex-wrap">
+          <button class="brutal-btn px-6 py-3 text-lg font-black uppercase disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale">
+            CLICK
+          </button>
+          <button disabled class="brutal-btn px-6 py-3 text-lg font-black uppercase disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale">
+            CLICK
+          </button>
+        </div>
+      </div>
+
+      <!-- 8. Aurora UI -->
+      <div id="btn-aurora" class="btn-example bg-gray-900 rounded-2xl p-6 dark:bg-gray-950 backdrop-blur-sm hidden">
+        <h2 class="text-lg font-semibold mb-4 text-white">Aurora UI</h2>
+        <p class="text-xs text-gray-300 mb-4">Gradient blending, blur, vibrant colours.</p>
+        <div class="flex justify-center items-center gap-4 flex-wrap">
+          <button class="aurora-btn relative px-6 py-3 rounded-full font-bold text-white shadow-lg shadow-orange-500/30 disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale">
+            <span class="relative z-10">Aurora</span>
+          </button>
+          <button disabled class="aurora-btn relative px-6 py-3 rounded-full font-bold text-white shadow-lg shadow-orange-500/30 disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale">
+            <span class="relative z-10">Aurora</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 9. Bento Box -->
+      <div id="btn-bento" class="btn-example bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 hidden">
+        <h2 class="text-lg font-semibold mb-4">Bento Box</h2>
+        <p class="text-xs opacity-70 mb-4">Soft rounded corners, subtle shadow, widget‑like.</p>
+        <div class="flex justify-center items-center gap-4 flex-wrap">
+          <button class="bento-btn px-4 py-2 text-sm font-medium text-gray-800 dark:text-gray-200 hover:shadow-lg transition-shadow duration-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale">
+            Schedule
+          </button>
+          <button disabled class="bento-btn px-4 py-2 text-sm font-medium text-gray-800 dark:text-gray-200 hover:shadow-lg transition-shadow duration-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale">
+            Schedule
+          </button>
+        </div>
+      </div>
+
+      <!-- 10. Retro Pixel -->
+      <div id="btn-pixel" class="btn-example bg-white dark:bg-gray-800 rounded-none p-6 hidden">
+        <h2 class="text-lg font-semibold mb-4">Retro Pixel</h2>
+        <p class="text-xs opacity-70 mb-4">Pixelated, blocky, old‑school video game style.</p>
+        <div class="flex justify-center items-center gap-4 flex-wrap">
+          <button class="pixel-btn px-6 py-3 text-base font-bold text-gray-900 disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale">
+            PLAY
+          </button>
+          <button disabled class="pixel-btn px-6 py-3 text-base font-bold text-gray-900 disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale">
+            PLAY
+          </button>
+        </div>
+      </div>
+
+      <!-- 11. Liquid / Gooey -->
+      <div id="btn-gooey" class="btn-example bg-white dark:bg-gray-800 rounded-2xl p-6 overflow-hidden hidden">
+        <h2 class="text-lg font-semibold mb-4">Liquid / Gooey</h2>
+        <p class="text-xs opacity-70 mb-4">Gooey SVG filter causes buttons to merge on hover.</p>
+        <div class="flex justify-center items-center gap-8 flex-wrap">
+          <div class="gooey-btn flex gap-2">
+            <button class="w-10 h-10 bg-pink-500 rounded-full text-white flex items-center justify-center shadow-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale">
+              <i class="fa-solid fa-heart"></i>
+            </button>
+            <button class="w-10 h-10 bg-pink-500 rounded-full text-white flex items-center justify-center shadow-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale">
+              <i class="fa-solid fa-star"></i>
+            </button>
+          </div>
+          <div class="gooey-btn flex gap-2">
+            <button disabled class="w-10 h-10 bg-pink-500 rounded-full text-white flex items-center justify-center shadow-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale">
+              <i class="fa-solid fa-heart"></i>
+            </button>
+            <button disabled class="w-10 h-10 bg-pink-500 rounded-full text-white flex items-center justify-center shadow-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale">
+              <i class="fa-solid fa-star"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+  </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow flex items-center justify-between z-10 px-4 py-2">
+    <div class="flex items-center gap-2 w-full">
+      <span class="text-xs text-gray-500 dark:text-gray-400">Button Morphisms Showcase v1.0</span>
+      <span class="text-xs text-gray-400 dark:text-gray-500 ml-auto">Select a style from the sidebar</span>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      // Theme toggle (unchanged)
+      const toggleBtn = document.getElementById('themeToggle');
+      const html = document.documentElement;
+      const iconMoon = toggleBtn.querySelector('.fa-moon');
+      const iconSun = toggleBtn.querySelector('.fa-sun');
+
+      function setTheme(theme) {
+        if (theme === 'dark') {
+          html.classList.add('dark');
+          html.classList.remove('light');
+          iconMoon.classList.add('hidden');
+          iconSun.classList.remove('hidden');
+        } else {
+          html.classList.remove('dark');
+          html.classList.add('light');
+          iconMoon.classList.remove('hidden');
+          iconSun.classList.add('hidden');
+        }
+        localStorage.setItem('theme', theme);
+      }
+
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      setTheme(savedTheme);
+      toggleBtn.addEventListener('click', () => {
+        const current = html.classList.contains('dark') ? 'light' : 'dark';
+        setTheme(current);
+      });
+
+      // Tab pane switching (smart, smooth)
+      const buttons = document.querySelectorAll('.sidebar-btn');
+      const examples = document.querySelectorAll('.btn-example');
+
+      function showExample(targetId) {
+        const newActive = document.getElementById(targetId);
+        if (!newActive) return;
+
+        // 1. Fade out current active example
+        const currentActive = document.querySelector('.btn-example.active');
+        if (currentActive) {
+          currentActive.classList.remove('active');   // triggers opacity transition to 0
+        }
+
+        // 2. After a tiny delay (so the fade-out begins), show the new one
+        // We use requestAnimationFrame to ensure the browser processes the removal
+        requestAnimationFrame(() => {
+          // Set display:block (remove hidden) but keep opacity 0
+          newActive.classList.add('active');
+          // Force a reflow to apply the display change
+          void newActive.offsetWidth;
+          // The CSS transition will then bring opacity to 1 because .active sets opacity:1
+        });
+
+        // 3. Update sidebar active button
+        buttons.forEach(btn => btn.classList.remove('sidebar-active'));
+        const activeBtn = document.querySelector(`.sidebar-btn[data-target="${targetId}"]`);
+        if (activeBtn) activeBtn.classList.add('sidebar-active');
+      }
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.dataset.target;
+          showExample(target);
+        });
+      });
+
+      // The first example is already active with the `active` class in HTML
+    })();
+  </script>
+</body>
+</html>
