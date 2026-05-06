@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full overflow-hidden dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=auto, user-scalable=no">
+  <title>TikTok DB · Saved Queries Manager</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {} }
+    }
+  </script>
+  <style>
+    .toast {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.85rem;
+      color: white;
+      background: #16a34a;
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+    }
+    .toast.error { background: #dc2626; }
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .query-sql{
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: monospace;
+      font-size: 0.75rem;
+      line-height: 1.4;
+      margin-top: 0.25rem;
+      color:#6b7280;
+    }
+    .dark .query-sql{
+      color: #9ca3af;
+    }
+  </style>
+</head>
+<body class="flex flex-col bg-white dark:bg-black text-gray-800 dark:text-white font-sans text-sm h-full overflow-hidden">
+
+  <!-- Toast container -->
+  <div id="toastContainer" style="position: fixed; bottom: 1rem; right: 1rem; z-index: 1000;"></div>
+
+  <!-- HEADER (same as view.html) -->
+  <header class="w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow flex items-center justify-between z-10 px-2 py-2">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-database text-pink-600 dark:text-pink-400 text-xl"></i>
+      <span class="font-semibold truncate">Saved Queries Manager</span>
+    </div>
+    <button id="themeToggle" class="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition">
+      <i class="fa-solid fa-moon text-lg"></i>
+    </button>
+  </header>
+
+  <!-- MAIN LAYOUT (flex row) -->
+  <main class="min-h-0 w-full min-w-0 flex flex-row flex-1 overflow-hidden">
+    <!-- Sidebar (similar to view.html, with DB ops) -->
+<aside class="w-24 bg-gray-100 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col overflow-hidden">
+<div class="p-2 space-y-2">
+        <button id="uploadDbBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded text-xs transition flex items-center justify-center gap-1 h-8">
+          <i class="fa-solid fa-upload"></i>
+        </button>
+        <button id="downloadDbBtn" class="w-full bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded text-xs transition flex items-center justify-center gap-1 h-8">
+          <i class="fa-solid fa-download"></i>
+        </button>
+        <a href="view.html" class="w-full bg-gray-600 hover:bg-gray-700 text-white py-1 px-2 rounded text-xs transition flex items-center justify-center gap-1 h-8">
+          <i class="fa-solid fa-eye"></i>
+        </a>
+      </div>
+
+<div id="fields" class="w-full flex-1 flex flex-col overflow-hidden overflow-y-auto min-h-0">
+
+</div>
+<!-- Database status indicator in sidebar -->
+<div class="mt-auto p-2 border-t border-gray-200 dark:border-gray-700 text-xs">
+<a href="index.html" class="text-xs text-pink-600 dark:text-pink-400 hover:underline flex items-center gap-1">
+<i class="fa-solid fa-arrow-left"></i>Extractor
+</a>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <!-- Tab bar (optional, but we keep consistent) -->
+      <div class="flex border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-2">
+        <button class="tab-btn px-3 py-2 text-xs border-b-2 border-pink-600 font-medium">Manage Queries</button>
+      </div>
+
+      <!-- Content area -->
+<div class="flex flex-col flex-1 min-h-0 overflow-hidden p-2 pb-0">
+        <!-- Form to add/edit query -->
+<div class="bg-gray-100 dark:bg-gray-800 p-2 rounded-lg mb-2">
+          <input type="hidden" id="editId" value="">
+          <div class="mb-3">
+            <label class="block text-sm font-medium mb-1">Query Name</label>
+            <input id="queryName" type="text" class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded px-2 py-1 text-sm">
+          </div>
+          <div class="mb-3">
+            <label class="block text-sm font-medium mb-1">SQL Statement</label>
+            <textarea id="querySql" rows="4" class="w-full font-mono text-xs border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded px-2 py-1"></textarea>
+          </div>
+          <div class="flex justify-end gap-2">
+            <button id="cancelEditBtn" class="px-3 py-1 text-xs bg-gray-500 text-white rounded hidden">Cancel</button>
+            <button id="saveQueryBtn" class="px-3 py-1 text-xs bg-pink-600 text-white rounded">Save Query</button>
+          </div>
+        </div>
+
+        <!-- List of saved queries -->
+<div class="flex flex-col flex-1 min-h-0 overflow-hidden p-2">
+<h2 class="text-sm font-semibold mb-2">Existing Queries</h2>
+<div id="queriesList" class="flex-1 space-y-2 overflow-y-auto">
+<p class="text-gray-500 text-xs">Loading...</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+  <!-- FOOTER (similar to view.html) -->
+  <footer class="w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-lg flex items-center justify-between z-10 px-2 py-1">
+    <div class="flex items-center gap-2 px-2 w-full min-w-0 text-xs">
+     <div class="flex items-center gap-1">
+<span id="dbSourceIndicator" class="inline-block w-2 h-2 rounded-full bg-gray-400"></span>
+<span id="dbSourceText" class="truncate">No DB</span>
+</div>
+      
+      
+      <span class="text-xs text-gray-500 dark:text-gray-400 ml-auto">SQM v1.0</span>
+    </div>
+  </footer>
+
+  <input type="file" id="dbFileInput" accept=".db" class="hidden">
+
+  <script src="js/jafersql.js"></script>
+  <script type="module" src="js/query.js"></script>
+
+  <script>
+    // Dark mode toggle (same as index/view)
+    (function() {
+      const toggleBtn = document.getElementById('themeToggle');
+      if (!toggleBtn) return;
+      const icon = toggleBtn.querySelector('i');
+      const html = document.documentElement;
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      if (savedTheme === 'light') {
+        html.classList.remove('dark');
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      } else {
+        html.classList.add('dark');
+        icon.classList.add('fa-moon');
+        icon.classList.remove('fa-sun');
+      }
+      toggleBtn.addEventListener('click', () => {
+        if (html.classList.contains('dark')) {
+          html.classList.remove('dark');
+          icon.classList.remove('fa-moon');
+          icon.classList.add('fa-sun');
+          localStorage.setItem('theme', 'light');
+        } else {
+          html.classList.add('dark');
+          icon.classList.remove('fa-sun');
+          icon.classList.add('fa-moon');
+          localStorage.setItem('theme', 'dark');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

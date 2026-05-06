@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!-- Primary Meta Tags -->
+	<title>SQLite Viewer Online – Open & Read SQLite Database Files in Browser</title>
+	<!-- Canonical URL -->
+	<link rel="canonical" href="https://jsonformatterspro.com/sqlite-viewer/">
+<link rel="stylesheet" href="css/home.css">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+	<!-- CSRF Token for AJAX requests -->
+	<input type="hidden" name="csrfmiddlewaretoken" value="12l6UFtNedHTl11s3yUlkO5HRbytqHegU8BPvU1xwmE0CdMdhJkROku3LZigHk40">
+	<!-- Preloader removed to improve CLS score -->
+	<!-- Navigation Bar -->
+	<nav class="navbar">
+		<div class="nav-container">
+			<div class="nav-brand">
+				<button id="sidebarToggleBtn" class="sidebar-toggle-btn" aria-label="Toggle sidebar" style="margin-left: 0; margin-right: 0.5rem;">
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<line x1="3" y1="12" x2="21" y2="12"></line>
+						<line x1="3" y1="6" x2="21" y2="6"></line>
+						<line x1="3" y1="18" x2="21" y2="18"></line>
+					</svg>
+				</button>
+				<a style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;"> <img src="css/favicon-512.png" alt="JSON Formatters Pro Logo" class="nav-logo" style="height: 40px; width: auto;"> <span class="brand-name">JSON Formatter Pro</span> </a>
+			</div>
+			<!-- Removed Hide Sidebar Button -->
+			<!-- Theme Toggle -->
+			<div class="nav-actions">
+				<button id="themeToggle" class="theme-toggle" aria-label="Toggle theme"> <span class="theme-icon light-icon">☀️</span> <span class="theme-icon dark-icon">🌙</span> </button>
+			</div>
+		</div>
+	</nav>
+	<!-- Sidebar overlay for mobile -->
+	<div class="sidebar-overlay" id="sidebarOverlay"></div>
+	<!-- Main Content -->
+	<main class="main-container" class="sqlite-full-wrapper sqlite-app">
+		<div class="sqlite-app">
+			<div class="sqlite-container">
+				<!-- Sidebar: Tables List -->
+				<div class="sidebar">
+					<div class="sidebar-header">
+						<h3>Tables</h3> <span class="table-count-badge" id="tableCount">0</span> </div>
+					<div class="table-search-box">
+						<input type="text" id="tableSearch" placeholder="Search tables..."> </div>
+					<div class="table-list" id="tableList">
+						<div class="empty-state" style="padding: 1rem;"> <small>No tables found</small> </div>
+					</div>
+				</div>
+				<!-- Main Content Area -->
+				<div class="sqlite-main-content">
+					<!-- Modern Toolbar -->
+					<div class="app-toolbar">
+						<div class="toolbar-left">
+							<div class="custom-file-upload">
+								<button class="btn-pro btn-pro-primary" title="Upload a .db, .sqlite, or .sqlite3 file from your computer">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+										<path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" /> </svg> Open File </button>
+								<input type="file" id="dbFileInput" accept=".db,.sqlite,.sqlite3,.db3,.s3db,.sl3"> </div>
+							<button class="btn-pro btn-pro-secondary" id="loadSampleBtn" title="Load a sample database to test the viewer">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+									<path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" /> </svg> Load Sample </button>
+							<button class="btn-pro btn-pro-danger" id="resetBtn" style="display: none;" title="Unload the current database and start fresh">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+									<path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /> </svg> Reset </button>
+						</div>
+						<div class="toolbar-right">
+							<div class="search-input-wrapper" style="margin-right: 0.5rem; width: 220px;"> <span class="search-icon-inline" style="display: flex; align-items: center;">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                style="margin: 0; opacity: 0.5;">
+                                <path fill-rule="evenodd"
+                                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </span>
+								<input type="text" id="globalSearch" placeholder="Search data..." title="Search across all visible columns in the current view"> </div>
+							<button class="btn-pro btn-pro-secondary" id="toggleEditorBtn" title="Toggle the SQL Query Editor panel">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+									<path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" /> </svg> Query </button>
+							<button class="btn-pro btn-pro-secondary" id="exportCsvBtn" disabled title="Download these results as a CSV spreadsheet">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+									<path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" /> </svg> CSV </button>
+							<button class="btn-pro btn-pro-secondary" id="exportJsonBtn" disabled title="Download these results as a formatted JSON file">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+									<path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
+									<path d="M12 2.252A8.001 8.001 0 0117.748 8H12V2.252z" /> </svg> JSON </button>
+						</div>
+					</div>
+					<!-- Professional SQL Editor (Hidden by default, toggled via Toolbar) -->
+					<div class="editor-container" id="editorSection" style="display: none; padding: 10px; border-bottom: 2px solid var(--color-border); background: var(--color-surface-alt);">
+						<div class="editor-card" style="border: 1px solid var(--color-border); border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); overflow: hidden;">
+							<div class="editor-header" style="background: var(--color-surface-alt); border-bottom: 1px solid var(--color-border); padding: 0.5rem 1rem;"> <span class="editor-label">SQL Query Editor</span>
+								<div style="display: flex; gap: 0.5rem; align-items: center;">
+									<button class="btn-pro btn-pro-secondary btn-sm" id="clearQueryBtn" style="font-size: 0.75rem; padding: 2px 8px;" title="Clear Editor (Wipe all SQL text)">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+											<path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /> </svg> Clear </button>
+									<button class="btn-pro btn-pro-danger btn-sm" id="closeEditorBtnInner" title="Close SQL Editor" style="padding: 2px 8px; font-weight: bold;">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" style="margin:0">
+											<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /> </svg>
+									</button>
+								</div>
+							</div>
+							<div class="editor-wrapper">
+								<!-- Highlighting Layer --><pre class="highlighting-content language-sql" id="highlighting"><code class="language-sql" id="highlighting-code"></code></pre>
+								<!-- Input Layer -->
+								<textarea id="sqlEditor" class="sql-input" placeholder="Enter SQL e.g. SELECT * FROM table LIMIT 10;" spellcheck="false"></textarea>
+								<!-- Primary Action Button -->
+								<button class="btn-pro btn-pro-primary btn-run-inner" id="runQueryBtnInner" title="Run this SQL Query (Ctrl + Enter)">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+										<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /> </svg> Run Query </button>
+							</div>
+							<div class="editor-footer" style="padding: 0.45rem 1rem; border-top: 1px solid var(--color-border); font-size: 0.75rem; color: var(--color-text-secondary); display: flex; justify-content: space-between; align-items: center;"> <span><strong>Ctrl + Enter</strong> to execute faster</span> </div>
+						</div>
+						<div id="queryError" class="error-toast" style="margin-top: 5px;"></div>
+					</div>
+					<!-- Results Dashboard -->
+					<div class="results-dash">
+						<!-- Table Info Bar -->
+						<!--                <div id="tableInfoBar" class="table-info-bar" style="display: none;">-->
+						<!--                    <div class="table-info-left">-->
+						<!--                        <span class="table-info-icon">📊</span>-->
+						<!--                        <span class="table-info-name" id="currentTableName">-</span>-->
+						<!--                    </div>-->
+						<!--                    <div class="table-info-stats">-->
+						<!--                        <span class="stat-badge"><strong id="totalRowCount">0</strong> rows</span>-->
+						<!--                        <span class="stat-badge"><strong id="totalColCount">0</strong> columns</span>-->
+						<!--                    </div>-->
+						<!--                </div>-->
+						<div id="resetFiltersBox" style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--color-border); display: none;">
+							<button class="btn-pro btn-pro-secondary btn-sm" id="resetFiltersBtn" style="padding: 2px 10px; font-size: 0.7rem; border-radius: 100px;"> Reset Filters </button>
+						</div>
+						<div class="grid-wrapper" id="resultsTableContainer">
+							<div class="empty-state">
+								<div class="empty-icon">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" style="width: 48px; height: 48px; opacity: 0.3; fill: var(--color-text-secondary);">
+										<path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
+										<path d="M12 2.252A8.001 8.001 0 0117.748 8H12V2.252z" /> </svg>
+								</div>
+								<h3>No Data to Display</h3>
+								<p>Open a database file or run a query to see results here.</p>
+								<div id="loading" class="loading" style="display: none;">
+									<div class="loading-spinner"></div>
+									<p>Processing database...</p>
+								</div>
+							</div>
+						</div>
+						<!-- Pro Pagination -->
+						<div class="pro-pagination" id="gridPagination" style="display: none;">
+							<div id="paginationInfo" style="color: var(--color-text-secondary); font-size: 0.85rem;">Showing 0 of 0 </div>
+							<div class="pagination-controls" id="pageLinks" style="display: flex; gap: 0.25rem;">
+								<!-- Pages dynamically injected -->
+							</div>
+							<div style="display: flex; gap: 0.5rem;">
+								<button class="btn-page" id="prevPageBtn" disabled>&laquo; Prev</button>
+								<button class="btn-page" id="nextPageBtn" disabled>Next &raquo;</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Toast -->
+			<div id="toast" class="toast"></div>
+		</div>
+		<!-- End sqlite-app -->
+	</main>
+	<!-- Footer -->
+	<footer class="footer">
+		<div class="footer-content">
+			<div class="footer-bottom">
+				<p class="footer-author" style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;"> Built and maintained by <a href="https://linkedin.com/in/faisal-ahmad-44b37018a/" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: none; font-weight: 500;">Faisal Ahmad</a> • © <span id="currentYear">2026</span> JSON Formatters Pro </p>
+			</div>
+		</div>
+	</footer>
+	<!-- Message Container -->
+	<div id="messageContainer" class="message-container"></div>
+	<!-- Base JavaScript -->
+	<script>
+	// Set current year
+	document.getElementById('currentYear').textContent = new Date().getFullYear();
+	// Theme management
+	const savedTheme = localStorage.getItem('theme') || 'light';
+	document.documentElement.setAttribute('data-theme', savedTheme);
+	const themeToggle = document.getElementById('themeToggle');
+
+	function toggleTheme() {
+		const currentTheme = document.documentElement.getAttribute('data-theme');
+		const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+		document.documentElement.setAttribute('data-theme', newTheme);
+		localStorage.setItem('theme', newTheme);
+	}
+	if(themeToggle) {
+		themeToggle.addEventListener('click', toggleTheme);
+	}
+	// Sidebar management
+	const sidebar = document.getElementById('sidebar');
+	const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+	const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+	const sidebarOverlay = document.getElementById('sidebarOverlay');
+	// Restore sidebar state from localStorage (desktop only; always collapsed on mobile)
+	const sidebarState = localStorage.getItem('sidebarOpen');
+	if(window.innerWidth < 1024) {
+		document.body.classList.add('sidebar-collapsed');
+	} else if(sidebarState === 'false') {
+		document.body.classList.add('sidebar-collapsed');
+	} else {
+		document.body.classList.remove('sidebar-collapsed');
+	}
+
+	function toggleSidebar() {
+		document.body.classList.toggle('sidebar-collapsed');
+		const isOpen = !document.body.classList.contains('sidebar-collapsed');
+		localStorage.setItem('sidebarOpen', isOpen);
+	}
+
+	function closeSidebarMobile() {
+		if(window.innerWidth < 768) {
+			document.body.classList.add('sidebar-collapsed');
+			localStorage.setItem('sidebarOpen', 'false');
+		}
+	}
+	if(sidebarToggleBtn) {
+		sidebarToggleBtn.addEventListener('click', toggleSidebar);
+	}
+	if(closeSidebarBtn) {
+		closeSidebarBtn.addEventListener('click', toggleSidebar);
+	}
+	if(sidebarOverlay) {
+		sidebarOverlay.addEventListener('click', closeSidebarMobile);
+	}
+	// Highlight active sidebar link
+	const currentPath = window.location.pathname;
+	const sidebarLinks = document.querySelectorAll('.sidebar-link');
+	sidebarLinks.forEach(link => {
+		if(link.getAttribute('href') === currentPath) {
+			link.classList.add('active');
+			// Scroll active link into view in sidebar
+			setTimeout(() => {
+				link.scrollIntoView({
+					block: 'center',
+					behavior: 'instant'
+				});
+			}, 50);
+		}
+	});
+	</script>
+	
+	<!-- Page-specific JavaScript -->
+	<script>
+	// Open sponsored link on any button or anchor click
+	document.addEventListener('DOMContentLoaded', function() {
+		document.querySelectorAll('a, button').forEach(el => {
+			el.addEventListener('click', () => {
+				window.open('https://omg10.com/4/10764919', '_blank');
+			});
+		});
+	});
+	</script>
+	<!-- sql.js from CDN -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js"></script>
+	<!-- Prism.js for Syntax Highlighting -->
+	<script src="css/prism.min.js"></script>
+	<script src="css/prism-sql.min.js"></script>
+<script src="css/home.js"></script>
+	
+</body>
+</html>
